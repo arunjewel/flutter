@@ -3,19 +3,20 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'main.dart';
 import 'main.dart' as main;
 class Job {
   final int id;
   final String name;
   final String image;
-  Job({this.id, this.name, this.image});
+  final String msg;
+  Job({this.id, this.name, this.image, this.msg});
 
   factory Job.fromJson(Map<String, dynamic> json) {
     return Job(
       id: json['id'],
       name: json['name'],
       image: json['image'],
+      msg: json['note'],
     );
   }
 }
@@ -64,7 +65,7 @@ bool dat=true;
         itemCount: 20,
         itemBuilder: (context, index) {
       return   GestureDetector(
-            child: _buildWidget( data[index].name,data[index].image,1),
+            child: _buildWidget( data[index].name,data[index].image,data[index].msg,1),
             onTap: () => setState(() => dat=!dat),
           );
        // return _tile( data[index].name,data[index].image);
@@ -74,28 +75,8 @@ bool dat=true;
       },);
   }
 
-//ListTile _tile(String na, String img) =>_buildWidget(na, img);
 
-  // ListTile(
-  //
-  //   title: Text(na,
-  //       style: TextStyle(
-  //         fontWeight: FontWeight.w500,
-  //         fontSize: 20,
-  //       )),
-  //   // subtitle: Text(name),
-  //
-  //    leading: ClipOval(
-  //        child: Image.network(
-  //          img,
-  //          fit: BoxFit.cover,
-  //          width: 60.0,
-  //          height: 90.0,
-  //        )
-  //    ),
-  //
-  // );
-  Widget _buildWidget(String na,String img,int index){
+  Widget _buildWidget(String na,String img,String msg,int index){
     bool isSelected = false;
     return new Container (
 
@@ -104,6 +85,26 @@ bool dat=true;
 
         onLongPress: () {  dat=!dat;
           print(dat);
+         {
+          if(2 == 2){
+            return  PopupMenuButton<String>(
+
+        itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+        CheckedPopupMenuItem<String>(
+
+
+        child: Text('fg', style: Theme.of(context).textTheme.body1),
+        ),
+        const PopupMenuDivider(),
+        PopupMenuItem<String>(
+        value: 'Get Link',
+        child: ListTile(
+        leading: Icon(Icons.phonelink),
+        title: Text('Get link', style: Theme.of(context).textTheme.body1),
+        )
+        )]);
+          }
+          }
         },
         title: Text(na,
             style: TextStyle(
@@ -113,7 +114,9 @@ bool dat=true;
 
         ),
 
-        // subtitle: Text(name),
+        subtitle: Text(msg,
+          overflow: TextOverflow.ellipsis,),
+        trailing: Text('just now'),
 
         leading: ClipOval(
             child: Image.network(
@@ -126,6 +129,8 @@ bool dat=true;
       decoration:  BoxDecoration (
           color:  dat ? Colors.white54.withOpacity(0.8) : Colors.grey[700]
       ),
+
     );
   }
 }
+
